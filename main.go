@@ -25,13 +25,15 @@ func main() {
 
 	http.Handle("/", http.FileServer(http.Dir("./web/")))
 	http.HandleFunc("/ws", wsHandler)
+
+	log.Print("starting listen on ", *addr)
 	log.Fatal(http.ListenAndServe(*addr, nil))
 }
 
 func wsHandler(w http.ResponseWriter, r *http.Request) {
 	c, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Print("upgrade:", err)
+		log.Print("upgrade: ", err)
 		return
 	}
 	defer c.Close()
@@ -40,10 +42,10 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 
 		err = c.WriteMessage(websocket.TextMessage, []byte(message))
 		if err != nil {
-			log.Println("write:", err)
+			log.Println("write: ", err)
 			break
 		}
-		log.Println("write:", message)
+		log.Println("write: ", message)
 
 		rs := 500 + rand.Intn(1500)
 
