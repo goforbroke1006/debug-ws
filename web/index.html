@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Debug</title>
+</head>
+<body>
+
+<script>
+    const logsLimit = 30;
+    let logsCounter = 0;
+    setInterval(function () {
+        if (logsCounter > logsLimit) {
+            let logNodes = document.body.getElementsByTagName('div');
+            let extraLen = logsCounter - logsLimit;
+            for (let i = 0; i < extraLen; i++) {
+                document.body.removeChild(logNodes[i]);
+                logsCounter--;
+            }
+        }
+    }, 1000);
+
+    let socket = new WebSocket("ws://127.0.0.1:8080/ws");
+
+    socket.onopen = function (event) {
+        document.body.innerHTML += '<div >Connection opened...</div>';
+        logsCounter++;
+    };
+
+    socket.onmessage = function (event) {
+        document.body.innerHTML += '<div >' + event.data + '</div>';
+        logsCounter++;
+    }
+
+    socket.onclose = function (event) {
+        document.body.innerHTML += '<div >Connection closed...</div>';
+        logsCounter++;
+    }
+
+    socket.onerror = function (event) {
+        document.body.innerHTML += '<div >ERROR: ' + event + '</div>';
+        logsCounter++;
+    }
+
+
+</script>
+
+</body>
+</html>
