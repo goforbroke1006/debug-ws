@@ -20,7 +20,8 @@
         }
     }, 1000);
 
-    let socket = new WebSocket("ws://127.0.0.1:8080/ws");
+    let wsUrl = "ws://" + location.host + "{{ .wsURL }}";
+    let socket = new WebSocket(wsUrl);
 
     socket.onopen = function (event) {
         document.body.innerHTML += '<div >Connection opened...</div>';
