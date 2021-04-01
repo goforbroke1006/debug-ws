@@ -9,6 +9,6 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o debug-ws .
 FROM debian:stretch
 WORKDIR /app/
 COPY --from=builder /code/debug-ws /app/
-COPY ./web/ /app/
+COPY ./web/ /app/web/
 ENTRYPOINT [ "/app/debug-ws", "--addr", "0.0.0.0:8080" ]
 EXPOSE 8080
