@@ -10,5 +10,5 @@ FROM debian:stretch
 WORKDIR /app/
 COPY --from=builder /code/debug-ws /app/
 COPY ./web/ /app/
-ENTRYPOINT [ "debug-ws", "--addr", "0.0.0.0:8080" ]
+ENTRYPOINT [ "/app/debug-ws", "--addr", "0.0.0.0:8080" ]
 EXPOSE 8080
