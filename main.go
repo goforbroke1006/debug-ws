@@ -32,6 +32,7 @@ func main() {
 
 	http.HandleFunc(*pathPrefix, homeHandler)
 	http.HandleFunc((*pathPrefix)+"ws", wsHandler)
+	http.Handle((*pathPrefix)+"static/", http.StripPrefix((*pathPrefix)+"static/", http.FileServer(http.Dir("./static/"))))
 
 	log.Print("starting listen on ", *addr)
 	log.Print("prefix path ", *pathPrefix)
@@ -62,6 +63,18 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer c.Close()
+
+	go func() {
+		for {
+			_, message, err := c.ReadMessage()
+			if err != nil {
+				log.Println("read: ", err)
+				break
+			}
+			log.Println("read: ", message)
+		}
+	}()
+
 	for {
 		message := time.Now().Format(time.RFC3339)
 
